@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "Green Oasis",
   description: "Green Oasis",
   icons: {
-    icon: "/images/logo.png",
+    icon: "/images/metaicon.png",
   },
 };
 
