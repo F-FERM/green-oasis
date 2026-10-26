@@ -153,7 +153,8 @@ export default function Footer() {
             </a>
           </div>
 
-          <div className="min-w-0 sm:text-right">
+          {/* Left-aligned: label and email both start at the same left edge */}
+          <div className="min-w-0">
             <p className="text-[11px] uppercase text-white sm:text-[12px]" style={EYEBROW}>
               Write to us
             </p>
@@ -180,8 +181,7 @@ export default function Footer() {
           </h2>
         </div>
 
-        {/* ====================== OFFICES ======================
-            */}
+        {/* ====================== OFFICES ====================== */}
         <ul className="mt-10 grid grid-cols-1 gap-x-12 gap-y-9 sm:grid-cols-2 lg:grid-cols-4 lg:gap-x-8 xl:gap-x-12">
           {OFFICES.map((o) => (
             <li key={o.city}>
