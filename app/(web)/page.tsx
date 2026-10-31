@@ -13,18 +13,17 @@ import Personas from "../components/home/Personas";
 export default function HomePage() {
   return (
     <main className="min-h-screen">
- <Hero/>
- <Marquee/>
- <About/>
- <Experiences/>
- <Discover/>
- <Difference/>
- <Personas/>
- <HowItWorks/>
- <Founder/>
- <Cta/>
- <Footer/>
- 
+      <Hero />
+      <Marquee />
+      <About />
+      <Experiences />
+      <Discover />
+      <Difference />
+      <Personas />
+      <HowItWorks />
+      <Founder />
+      <Cta />
+      <Footer />
     </main>
   );
 }
