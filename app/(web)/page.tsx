@@ -1,4 +1,5 @@
 import About from "../components/home/About";
+import CertificationsSection from "../components/home/CertificationsSection";
 import Cta from "../components/home/Cta";
 import Difference from "../components/home/Difference";
 import Discover from "../components/home/Discover";
@@ -24,7 +25,8 @@ export default function HomePage() {
       <Discover />
       <Founder />
       <ServicesSection />
-      <YouTubeShorts/>
+      <YouTubeShorts />
+      <CertificationsSection />
       <Difference />
       <Personas />
       <HowItWorks />
