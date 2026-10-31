@@ -4,6 +4,7 @@ import Difference from "../components/home/Difference";
 import Discover from "../components/home/Discover";
 import Experiences from "../components/home/Experiences";
 import Footer from "../components/home/Footer";
+import FounderMessage from "../components/home/FounderMessage";
 import Hero from "../components/home/Hero";
 import HowItWorks from "../components/home/HowItWorks";
 import Founder from "../components/home/Journey";
@@ -20,6 +21,7 @@ export default function HomePage() {
       <StatsStrip />
       <Experiences />
       <Discover />
+      <FounderMessage/>
       <Difference />
       <Personas />
       <HowItWorks />
