@@ -1,12 +1,4 @@
-import { DM_Sans, Syne, DM_Serif_Display } from "next/font/google";
-
-const dmSans = DM_Sans({ subsets: ["latin"], weight: ["400", "700"] });
-const syne = Syne({ subsets: ["latin"], weight: ["700"] });
-const dmSerif = DM_Serif_Display({
-  subsets: ["latin"],
-  weight: "400",
-  style: "italic",
-});
+import { dmSans, syne, dmSerif } from "@/app/fonts";
 
 const PAD = "px-4 sm:px-8 lg:px-12 xl:px-20";
 

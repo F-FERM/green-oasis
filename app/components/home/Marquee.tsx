@@ -1,8 +1,6 @@
 import Image from "next/image";
-import { DM_Sans } from "next/font/google";
 import starImg from "../../../public/images/charm_north-star.png";
-
-const dmSans = DM_Sans({ subsets: ["latin"], weight: ["800"] });
+import { dmSans } from "@/app/fonts";
 
 const ITEMS = [
   "Travel for you",

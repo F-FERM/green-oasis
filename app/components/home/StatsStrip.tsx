@@ -1,15 +1,4 @@
-import { DM_Serif_Display, Syne } from "next/font/google";
-
-const dmSerif = DM_Serif_Display({
-  subsets: ["latin"],
-  weight: "400",
-  style: ["italic"],
-});
-
-const syne = Syne({
-  subsets: ["latin"],
-  weight: ["400"],
-});
+import { syne, dmSerif } from "@/app/fonts";
 
 const STATS = [
   { value: "150,000", suffix: "+", label: "Happy Travellers" },

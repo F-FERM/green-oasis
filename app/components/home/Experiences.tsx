@@ -1,20 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
-import { DM_Sans, Syne, DM_Serif_Display } from "next/font/google";
 import { ArrowUpRight } from "lucide-react";
 import image1 from "../../../public/images/ex1.jpg";
 import image2 from "../../../public/images/ex2.jpg";
 import image3 from "../../../public/images/ex3.jpg";
 import image4 from "../../../public/images/ex4.jpg";
 import image5 from "../../../public/images/ex5.jpg";
-
-const dmSans = DM_Sans({ subsets: ["latin"], weight: ["400", "700"] });
-const syne = Syne({ subsets: ["latin"], weight: ["700"] });
-const dmSerif = DM_Serif_Display({
-  subsets: ["latin"],
-  weight: "400",
-  style: "italic",
-});
+import { dmSans, syne, dmSerif } from "@/app/fonts";
 
 /* Same side padding as Hero / Founder */
 const PAD = "px-4 sm:px-8 lg:px-12 xl:px-20";

@@ -1,21 +1,5 @@
 import Image from "next/image";
-import { DM_Sans, DM_Serif_Display, Syne } from "next/font/google";
-
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
-const syne = Syne({
-  subsets: ["latin"],
-  weight: ["700"],
-});
-
-const dmSerif = DM_Serif_Display({
-  subsets: ["latin"],
-  weight: ["400"],
-  style: ["italic"],
-});
+import { dmSans, syne, dmSerif } from "@/app/fonts";
 
 const CERTIFICATIONS = [
   { src: "/images/certifications/bni.png", alt: "BNI" },
