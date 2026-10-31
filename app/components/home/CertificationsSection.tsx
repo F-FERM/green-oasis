@@ -30,10 +30,9 @@ export default function CertificationsSection() {
   return (
     <section
       id="certifications"
-      className={`${dmSans.className}  w-full bg-[#F7F8F1] px-5 py-16 text-[#171F1C] sm:px-8 sm:py-20 lg:px-[7%] lg:py-[76px]`}
+      className={`${dmSans.className} w-full overflow-hidden bg-[#F7F8F1] px-4 py-14 text-black sm:px-8 sm:py-20 lg:px-12 xl:px-20`}
     >
-      <div className="mx-auto w-[84%] max-w-[1553px]">
-        {/* Heading */}
+      <div className="mx-auto w-full max-w-[1465px]">
         <div className="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-center lg:mb-[58px]">
           <div>
             <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.19em] text-[#111916]">
@@ -55,7 +54,7 @@ export default function CertificationsSection() {
             </h2>
           </div>
 
-          <p className="max-w-[310px] pb-1 text-[16px] leading-[1.65] text-[#748078] sm:text-[14px]">
+          <p className="max-w-[310px] pb-1 text-[13px] leading-[1.65] text-[#748078] sm:text-[14px]">
             Our certifications reflect our commitment to quality, reliability,
             and professional standards, giving you greater confidence in every
             journey.
@@ -63,7 +62,7 @@ export default function CertificationsSection() {
         </div>
       </div>
 
-      {/* Continuously moving certification logos */}
+      {/* Full-width continuous logo animation */}
       <div className="certification-marquee w-full overflow-hidden">
         <div className="certification-track flex w-max items-center">
           {[0, 1].map((group) => (
