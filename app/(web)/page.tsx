@@ -12,6 +12,7 @@ import Marquee from "../components/home/Marquee";
 import Personas from "../components/home/Personas";
 import ServicesSection from "../components/home/ServicesSection";
 import StatsStrip from "../components/home/StatsStrip";
+import YouTubeShorts from "../components/home/YouTubeShorts";
 
 export default function HomePage() {
   return (
@@ -24,6 +25,7 @@ export default function HomePage() {
       <Discover />
       <FounderMessage />
       <ServicesSection />
+      <YouTubeShorts/>
       <Difference />
       <Personas />
       <HowItWorks />
