@@ -29,10 +29,10 @@ export default function YouTubeShorts() {
   return (
     <section
       id="traveller-stories"
-      className={`${dmSans.className} w-full bg-[#F7F8F2] px-5 py-16 text-[#111916] sm:px-8 sm:py-20 lg:px-[6.2%] lg:py-[76px]`}
+      className={`${dmSans.className} w-full bg-[#F7F8F2] px-4 py-14 text-black sm:px-8 sm:py-20 lg:px-12 xl:px-20`}
     >
-      <div className="mx-auto max-w-[1400px]">
-        <div className="mb-8 flex flex-col justify-between gap-6 md:mb-8 md:flex-row md:items-end">
+      <div className="mx-auto w-full max-w-[1465px]">
+        <div className="mb-8 flex flex-col justify-between gap-6 md:items-end lg:mb-8 md:flex-row">
           <div>
             <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.19em] text-[#27332E]">
               06 / Travel made human
@@ -58,7 +58,7 @@ export default function YouTubeShorts() {
           </p>
         </div>
 
-        {/* Four supplied Shorts, displayed in one row without slider controls. */}
+        {/* YouTube Shorts */}
         <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4 lg:gap-[17px]">
           {VIDEOS.map((video) => (
             <article
@@ -68,7 +68,7 @@ export default function YouTubeShorts() {
               <iframe
                 src={`https://www.youtube-nocookie.com/embed/${video.id}?playsinline=1&rel=0`}
                 title={video.title}
-                className="absolute inset-0 h-full w-full"
+                className="absolute inset-0 h-full w-full border-0"
                 loading="lazy"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 referrerPolicy="strict-origin-when-cross-origin"
