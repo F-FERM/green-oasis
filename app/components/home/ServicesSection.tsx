@@ -59,9 +59,9 @@ export default function ServicesSection() {
   return (
     <section
       id="services"
-      className={`${dmSans.className} w-full bg-[#DDF5E1] px-5 py-16 text-[#171F1C] sm:px-8 sm:py-20 lg:px-[7%] lg:py-[76px]`}
+      className={`${dmSans.className} w-full bg-[#DDF5E1] px-4 py-14 text-black sm:px-8 sm:py-20 lg:px-12 xl:px-20`}
     >
-      <div className="mx-auto w-full max-w-[1358px]">
+      <div className="mx-auto w-full max-w-[1465px]">
         {/* Section heading */}
         <div className="mb-9 flex flex-col justify-between gap-6 lg:mb-[38px] lg:flex-row lg:items-end">
           <div>
