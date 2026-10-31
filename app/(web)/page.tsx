@@ -10,6 +10,7 @@ import HowItWorks from "../components/home/HowItWorks";
 import Founder from "../components/home/Journey";
 import Marquee from "../components/home/Marquee";
 import Personas from "../components/home/Personas";
+import ServicesSection from "../components/home/ServicesSection";
 import StatsStrip from "../components/home/StatsStrip";
 
 export default function HomePage() {
@@ -21,7 +22,8 @@ export default function HomePage() {
       <StatsStrip />
       <Experiences />
       <Discover />
-      <FounderMessage/>
+      <FounderMessage />
+      <ServicesSection />
       <Difference />
       <Personas />
       <HowItWorks />
