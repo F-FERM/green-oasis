@@ -27,9 +27,9 @@ export default function HomePage() {
       <ServicesSection />
       <YouTubeShorts />
       <CertificationsSection />
-      <Difference />
+      {/* <Difference />
       <Personas />
-      <HowItWorks />
+      <HowItWorks /> */}
       <Cta />
       <Footer />
     </main>
