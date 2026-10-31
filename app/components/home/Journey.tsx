@@ -52,7 +52,7 @@ export default function Founder() {
             className="mb-4 text-[11px] uppercase text-[#161C1B] sm:mb-[22px] sm:text-[12px]"
             style={EYEBROW}
           >
-            07 / A note from our founder
+            04 / A note from our founder
           </p>
 
           <h2
