@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowUpRight, Menu, X } from "lucide-react";
-import heroImg from "../../../public/banner/banner.png";
+import heroDesktop from "../../../public/banner/green-oasis-hero-desktop.png";
 import logoImg from "../../../public/images/logo.png";
 
 const NAV_LINKS = [
@@ -19,6 +19,7 @@ export default function Hero() {
 
   const handleCtaClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
+
     const target =
       document.getElementById("cta") || document.getElementById("plan");
 
@@ -33,18 +34,30 @@ export default function Hero() {
       id="hero"
       className="relative isolate min-h-[540px] h-[100svh] w-full overflow-hidden bg-[#65ce70]"
     >
-      {/* The uploaded banner contains the complete hero artwork and headline. */}
-      <Image
-        src={heroImg}
-        alt="Green Oasis — Green signal"
-        fill
-        priority
-        sizes="100vw"
-        quality={100}
-        className="absolute inset-0 z-0 object-cover object-center"
-      />
+      {/* Responsive hero background */}
+      <picture className="absolute inset-0 z-0 block h-full w-full">
+        <source
+          media="(max-width: 640px)"
+          srcSet="/banner/green-oasis-hero-mobile.png"
+        />
 
-      {/* Header sits transparently over the banner, as in the reference. */}
+        <source
+          media="(max-width: 1024px)"
+          srcSet="/banner/green-oasis-hero-tablet.png"
+        />
+
+        <Image
+          src={heroDesktop}
+          alt="Green Oasis — Green signal"
+          fill
+          priority
+          sizes="100vw"
+          quality={100}
+          className="object-cover object-center"
+        />
+      </picture>
+
+      {/* Header */}
       <div className="absolute inset-x-0 top-0 z-20 px-5 sm:px-8 lg:px-12 xl:px-[4.3%]">
         <header className="relative flex min-h-[64px] items-center justify-between gap-5 border-b border-white/30 py-3 sm:min-h-[72px]">
           <Link
@@ -121,6 +134,7 @@ export default function Hero() {
                   {link.label}
                 </Link>
               ))}
+
               <Link
                 href="#cta"
                 onClick={(e) => {
