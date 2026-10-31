@@ -9,6 +9,7 @@ import HowItWorks from "../components/home/HowItWorks";
 import Founder from "../components/home/Journey";
 import Marquee from "../components/home/Marquee";
 import Personas from "../components/home/Personas";
+import StatsStrip from "../components/home/StatsStrip";
 
 export default function HomePage() {
   return (
@@ -16,6 +17,7 @@ export default function HomePage() {
       <Hero />
       <Marquee />
       <About />
+      <StatsStrip />
       <Experiences />
       <Discover />
       <Difference />
