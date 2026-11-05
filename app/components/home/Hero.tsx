@@ -13,7 +13,7 @@ const NAV_LINKS = [
   { label: "Our Story", href: "#story" },
   { label: "Experiences", href: "#experiences" },
   { label: "Discover", href: "#discover" },
-  { label: "Why Green Oasis", href: "#why" },
+  { label: "Why Green Oasis", href: "#discover" },
 ];
 
 const FALLBACK_MOBILE = "/banner/green-oasis-hero-mobile.png";
