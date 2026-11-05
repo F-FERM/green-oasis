@@ -16,7 +16,7 @@ const processQueue = (error: any, token: string | null = null) => {
 };
 
 const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3001/api/",
+  baseURL:"https://green-oasis-api-production.up.railway.app/api/",
   headers: {
     "Content-Type": "application/json",
   },

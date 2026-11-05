@@ -1,2 +1,1 @@
-
-export const baseURL = process.env.NEXT_PUBLIC_BASE_URL || "";
+export const baseURL ="https://green-oasis-api-production.up.railway.app/api";
