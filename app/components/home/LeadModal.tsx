@@ -46,22 +46,35 @@ export default function LeadModal() {
 
     window.addEventListener("open-lead-modal", handleOpenModal);
 
-    // Click handler to open modal on CTA buttons
+    // Global click handler to open lead modal on ANY button or link on the website
     const handleGlobalClick = (e: MouseEvent) => {
-      const target = (e.target as HTMLElement)?.closest(
-        'a[href="#cta"], a[href="#contact"], a[href="#plan"], button[data-lead-modal="true"], a[data-lead-modal="true"]',
+      const el = e.target as HTMLElement;
+      if (!el) return;
+
+      const clickable = el.closest(
+        "button, a, [role='button'], input[type='button'], input[type='submit']",
       );
-      if (target) {
-        e.preventDefault();
-        setIsOpen(true);
+      if (!clickable) return;
+
+      // Do not intercept clicks inside the Lead Modal itself or admin dashboard
+      if (
+        clickable.closest("[role='dialog']") ||
+        clickable.closest("#lead-modal") ||
+        window.location.pathname.startsWith("/admin")
+      ) {
+        return;
       }
+
+      e.preventDefault();
+      e.stopPropagation();
+      setIsOpen(true);
     };
 
-    document.addEventListener("click", handleGlobalClick);
+    document.addEventListener("click", handleGlobalClick, true);
 
     return () => {
       window.removeEventListener("open-lead-modal", handleOpenModal);
-      document.removeEventListener("click", handleGlobalClick);
+      document.removeEventListener("click", handleGlobalClick, true);
     };
   }, [isMounted]);
 
@@ -120,6 +133,7 @@ export default function LeadModal() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
+            id="lead-modal"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
