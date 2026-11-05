@@ -16,12 +16,6 @@ const FALLBACK_ITEMS = [
 
 const GROUPS = [0, 1, 2, 3, 4, 5];
 
-/* Timing for the fast pass */
-const WAIT = 5;
-const SWEEP = 2;
-const CYCLE = WAIT + SWEEP;
-const WAIT_PCT = (WAIT / CYCLE) * 100;
-
 /* Skeleton widths approximating real text widths */
 const SKELETON_WIDTHS = [
   "w-[100px] sm:w-[130px] lg:w-[160px]",
@@ -124,15 +118,9 @@ export default function Marquee() {
               from { transform: translate3d(0, 0, 0); }
               to   { transform: translate3d(-16.6667%, 0, 0); }
             }
-
-            /* rests off-screen for WAIT seconds, then sweeps across fast */
-            @keyframes fast-pass {
-              0%, ${WAIT_PCT}% { transform: translate3d(100vw, 0, 0); }
-              100%             { transform: translate3d(-100%, 0, 0); }
-            }
           `}</style>
 
-          {/* BASE layer – normal slow marquee, original colours */}
+          {/* Normal slow marquee */}
           <div className="flex w-max animate-[ticker-scroll_10s_linear_infinite] items-center will-change-transform motion-reduce:animate-none">
             {GROUPS.map((g) => (
               <ul
@@ -145,19 +133,6 @@ export default function Marquee() {
                 ))}
               </ul>
             ))}
-          </div>
-
-          {/* FAST PASS layer */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-y-0 left-0 flex w-max items-center will-change-transform motion-reduce:hidden"
-            style={{ animation: `fast-pass ${CYCLE}s linear infinite` }}
-          >
-            <ul className="flex items-center gap-[32px] px-[40px] sm:gap-[48px]">
-              {items.map((text, i) => (
-                <Item key={`${text}-${i}`} text={text} />
-              ))}
-            </ul>
           </div>
         </>
       )}

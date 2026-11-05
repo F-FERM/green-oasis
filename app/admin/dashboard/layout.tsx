@@ -1,22 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import { useRouter } from "next/navigation";
-
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AppSidebar } from "@/app/components/admin/Sidebar";
 
-
 export default function AdminLayout({ children }: any) {
   const router = useRouter();
-
   const [authorized, setAuthorized] = useState(false);
 
   useEffect(() => {
@@ -32,7 +27,7 @@ export default function AdminLayout({ children }: any) {
   if (!authorized) return null;
 
   return (
-    <TooltipProvider >
+    <TooltipProvider>
       <SidebarProvider>
         <AppSidebar />
 
@@ -43,16 +38,11 @@ export default function AdminLayout({ children }: any) {
             className="
               flex
               h-16
-
               shrink-0
-
               items-center
               gap-2
-
               border-b
-
               bg-white
-
               px-4
             "
           >
@@ -73,9 +63,7 @@ export default function AdminLayout({ children }: any) {
           <main
             className="
               flex-1
-
               bg-[#F7F7F7]
-
               p-6
             "
           >

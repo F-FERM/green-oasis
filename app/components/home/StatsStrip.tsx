@@ -59,9 +59,10 @@ export default function StatsStrip() {
   return (
     <section
       aria-label="Green Oasis statistics"
-      className="flex min-h-[116px] w-full items-center bg-[#004530] px-5"
+      className="flex w-full items-center bg-[#004530] px-4 py-8 sm:min-h-[116px] sm:px-6 sm:py-6 lg:px-5 lg:py-0"
     >
-      <div className="mx-auto grid w-full max-w-[1112px] grid-cols-4 items-center">
+      {/* 2 columns on phones, 4 columns from 640px up */}
+      <div className="mx-auto grid w-full max-w-[1112px] grid-cols-2 items-start gap-x-4 gap-y-8 sm:grid-cols-4 sm:items-center sm:gap-x-4 sm:gap-y-0">
         {loading
           ? FALLBACK_STATS.map((s) => (
               <div
@@ -69,8 +70,8 @@ export default function StatsStrip() {
                 aria-hidden="true"
                 className="flex min-w-0 flex-col items-center justify-center"
               >
-                <div className="h-[clamp(22px,3.3vw,38px)] w-[clamp(50px,7vw,110px)] animate-pulse rounded bg-white/15" />
-                <div className="mt-[8px] h-[10px] w-[clamp(50px,8vw,120px)] animate-pulse rounded bg-white/15" />
+                <div className="h-[clamp(26px,7vw,38px)] w-[clamp(70px,22vw,110px)] animate-pulse rounded bg-white/15 sm:h-[clamp(22px,3.3vw,38px)] sm:w-[clamp(50px,7vw,110px)]" />
+                <div className="mt-2 h-[10px] w-[clamp(70px,26vw,120px)] animate-pulse rounded bg-white/15 sm:w-[clamp(50px,8vw,120px)]" />
               </div>
             ))
           : STATS.map((stat) => (
@@ -79,7 +80,7 @@ export default function StatsStrip() {
                 className="flex min-w-0 flex-col items-center justify-center text-center text-white"
               >
                 <p
-                  className={`${syne.className} whitespace-nowrap text-[clamp(22px,3.3vw,38px)] font-normal leading-[1] tracking-[-0.055em]`}
+                  className={`${syne.className} whitespace-nowrap text-[clamp(26px,8vw,40px)] font-normal leading-none tracking-[-0.055em] sm:text-[clamp(22px,3.6vw,40px)]`}
                 >
                   {stat.value}
                   <span className="ml-[1px] text-[0.58em] tracking-[-0.035em]">
@@ -87,8 +88,9 @@ export default function StatsStrip() {
                   </span>
                 </p>
 
+                {/* label may wrap on small screens instead of overflowing */}
                 <p
-                  className={`${dmSerif.className} mt-[5px] whitespace-nowrap text-[10px] font-normal italic leading-[1.1] text-white/80`}
+                  className={`${dmSerif.className} mt-1.5 max-w-full text-balance text-[12px] font-normal italic leading-[1.2] text-white/80 sm:mt-[5px] sm:text-[clamp(10px,1.3vw,13px)] sm:leading-[1.1]`}
                 >
                   {stat.label}
                 </p>
