@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import heroDesktop from "../../../public/banner/green-oasis-hero-desktop.png";
 import logoImg from "../../../public/images/logo.png";
+
+const API_BASE = process.env.NEXT_PUBLIC_BASE_URL ?? "";
 
 const NAV_LINKS = [
   { label: "Our Story", href: "#story" },
@@ -14,8 +16,63 @@ const NAV_LINKS = [
   { label: "Why Green Oasis", href: "#why" },
 ];
 
+const FALLBACK_MOBILE = "/banner/green-oasis-hero-mobile.png";
+const FALLBACK_TABLET = "/banner/green-oasis-hero-tablet.png";
+
+type HomeHero = {
+  desktopImage?: string;
+  tabletImage?: string;
+  mobileImage?: string;
+  isActive?: boolean;
+};
+
+const resolveImg = (path?: string) => {
+  if (!path) return "";
+  return /^https?:\/\//.test(path) ? path : `${API_BASE}${path}`;
+};
+
 export default function Hero() {
   const [open, setOpen] = useState(false);
+  const [hero, setHero] = useState<HomeHero | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const fetchHero = async () => {
+      try {
+        const res = await fetch(`${API_BASE}/home-hero`, {
+          signal: controller.signal,
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        const json = await res.json();
+        const data: HomeHero | null = json?.data ?? json ?? null;
+
+        if (data && data.isActive !== false) setHero(data);
+      } catch (err) {
+        if ((err as Error).name !== "AbortError") {
+          console.error("Failed to load hero:", err);
+        }
+      } finally {
+        if (!controller.signal.aborted) setLoading(false);
+      }
+    };
+
+    fetchHero();
+    return () => controller.abort();
+  }, []);
+
+  // API image if available, otherwise the original static asset
+  const desktopSrc = hero?.desktopImage
+    ? resolveImg(hero.desktopImage)
+    : heroDesktop;
+  const tabletSrc = hero?.tabletImage
+    ? resolveImg(hero.tabletImage)
+    : FALLBACK_TABLET;
+  const mobileSrc = hero?.mobileImage
+    ? resolveImg(hero.mobileImage)
+    : FALLBACK_MOBILE;
 
   const handleCtaClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -35,27 +92,29 @@ export default function Hero() {
       className="relative isolate min-h-[540px] h-[100svh] w-full overflow-hidden bg-[#65ce70]"
     >
       {/* Responsive hero background */}
-      <picture className="absolute inset-0 z-0 block h-full w-full">
-        <source
-          media="(max-width: 640px)"
-          srcSet="/banner/green-oasis-hero-mobile.png"
+      {loading ? (
+        // Skeleton
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 z-0 h-full w-full animate-pulse bg-gradient-to-br from-[#65ce70] via-[#8be07f] to-[#65ce70]"
         />
+      ) : (
+        <picture className="absolute inset-0 z-0 block h-full w-full">
+          <source media="(max-width: 640px)" srcSet={mobileSrc} />
 
-        <source
-          media="(max-width: 1024px)"
-          srcSet="/banner/green-oasis-hero-tablet.png"
-        />
+          <source media="(max-width: 1024px)" srcSet={tabletSrc} />
 
-        <Image
-          src={heroDesktop}
-          alt="Green Oasis — Green signal"
-          fill
-          priority
-          sizes="100vw"
-          quality={100}
-          className="object-cover object-center"
-        />
-      </picture>
+          <Image
+            src={desktopSrc}
+            alt="Green Oasis — Green signal"
+            fill
+            priority
+            sizes="100vw"
+            quality={100}
+            className="object-cover object-center"
+          />
+        </picture>
+      )}
 
       {/* Header */}
       <div className="absolute inset-x-0 top-0 z-20 px-5 sm:px-8 lg:px-12 xl:px-[4.3%]">
