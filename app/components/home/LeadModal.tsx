@@ -119,10 +119,14 @@ export default function LeadModal() {
       setTimeout(() => {
         setIsOpen(false);
       }, 1500);
-    } catch (err) {
+    } catch (err: any) {
       console.error("Lead submission error:", err);
-      toast.error(err instanceof Error ? err.message : "Something went wrong. Please try again.");
-    } finally {
+
+      const errorMessage =
+        err.response?.data?.message ||
+        "Something went wrong. Please try again.";
+
+      toast.error(errorMessage);
       setLoading(false);
     }
   };
