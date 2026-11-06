@@ -4,6 +4,9 @@ import React, { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Loader2, Send, X } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
+import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
+import type { Country } from "react-phone-number-input";
+import "react-phone-number-input/style.css";
 import api from "@/lib/axios";
 
 export default function LeadModal() {
@@ -78,9 +81,7 @@ export default function LeadModal() {
     };
   }, [isMounted]);
 
-  if (!isMounted) {
-    return null;
-  }
+  if (!isMounted) return null;
 
   const handleClose = () => {
     setIsOpen(false);
@@ -95,22 +96,30 @@ export default function LeadModal() {
       return;
     }
 
-    if (!phone.trim()) {
+    if (!phone) {
       toast.error("Please enter your phone number");
+      return;
+    }
+
+    if (!isValidPhoneNumber(phone)) {
+      toast.error("Please enter a valid phone number");
       return;
     }
 
     try {
       setLoading(true);
+
       await api.post("/leads", {
         name: name.trim(),
-        phone: phone.trim(),
+        phone: phone, // International format, e.g. +919876543210
         city: city.trim(),
         state: state.trim(),
       });
 
       toast.success("Thank you! Our team will contact you shortly.");
+
       sessionStorage.setItem("lead_modal_submitted", "true");
+
       setName("");
       setPhone("");
       setCity("");
@@ -127,6 +136,7 @@ export default function LeadModal() {
         "Something went wrong. Please try again.";
 
       toast.error(errorMessage);
+    } finally {
       setLoading(false);
     }
   };
@@ -134,6 +144,7 @@ export default function LeadModal() {
   return (
     <>
       <Toaster position="top-right" />
+
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -152,7 +163,7 @@ export default function LeadModal() {
               onClick={(e) => e.stopPropagation()}
               className="relative w-full max-w-[480px] overflow-hidden rounded-[24px] bg-white p-6 shadow-2xl sm:p-8"
             >
-              {/* Header Close Button */}
+              {/* Close Button */}
               <button
                 type="button"
                 onClick={handleClose}
@@ -162,14 +173,16 @@ export default function LeadModal() {
                 <X size={18} />
               </button>
 
-              {/* Title & Description */}
+              {/* Header */}
               <div className="mb-6">
                 <span className="text-[11px] font-bold uppercase tracking-widest text-[#004530]">
                   Green Oasis
                 </span>
+
                 <h3 className="mt-1 text-2xl font-bold tracking-tight text-[#111]">
                   Plan Your Journey
                 </h3>
+
                 <p className="mt-2 text-sm text-[#555]">
                   Please enter your details below. Our travel experts will get
                   in touch with you shortly.
@@ -178,11 +191,12 @@ export default function LeadModal() {
 
               {/* Form */}
               <form onSubmit={handleSubmit} className="space-y-4">
-                {/* Name field */}
+                {/* Name */}
                 <div>
                   <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-[#333]">
                     Full Name <span className="text-red-500">*</span>
                   </label>
+
                   <input
                     type="text"
                     value={name}
@@ -193,27 +207,30 @@ export default function LeadModal() {
                   />
                 </div>
 
-                {/* Phone field */}
+                {/* Phone with country code and flag */}
                 <div>
                   <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-[#333]">
                     Phone Number <span className="text-red-500">*</span>
                   </label>
-                  <input
-                    type="tel"
+
+                  <PhoneInput
+                    international
+                    defaultCountry={"IN" as Country}
+                    countryCallingCodeEditable={false}
                     value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
+                    onChange={(value) => setPhone(value || "")}
                     placeholder="Enter mobile number"
-                    required
-                    className="h-12 w-full rounded-xl border border-[#E4E4E4] bg-[#FDFDFD] px-4 text-sm text-[#111] transition-all focus:border-[#004530] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#004530]/20"
+                    className="lead-phone-input"
                   />
                 </div>
 
-                {/* City & State Row */}
+                {/* City & State */}
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
                     <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-[#333]">
                       City
                     </label>
+
                     <input
                       type="text"
                       value={city}
@@ -227,6 +244,7 @@ export default function LeadModal() {
                     <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-[#333]">
                       State
                     </label>
+
                     <input
                       type="text"
                       value={state}
@@ -237,7 +255,7 @@ export default function LeadModal() {
                   </div>
                 </div>
 
-                {/* Submit button */}
+                {/* Submit */}
                 <button
                   type="submit"
                   disabled={loading}
@@ -260,6 +278,68 @@ export default function LeadModal() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Phone input styling */}
+      <style jsx global>{`
+        .lead-phone-input {
+          display: flex;
+          align-items: center;
+          width: 100%;
+          height: 48px;
+          border: 1px solid #e4e4e4;
+          border-radius: 12px;
+          background: #fdfdfd;
+          padding: 0 12px;
+          transition: all 0.2s;
+        }
+
+        .lead-phone-input:focus-within {
+          border-color: #004530;
+          background: white;
+          box-shadow: 0 0 0 2px rgba(0, 69, 48, 0.12);
+        }
+
+        .lead-phone-input .PhoneInputCountry {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          margin-right: 10px;
+        }
+
+        .lead-phone-input .PhoneInputCountrySelect {
+          cursor: pointer;
+          border: none;
+          outline: none;
+          background: transparent;
+        }
+
+        .lead-phone-input .PhoneInputCountryIcon {
+          width: 24px;
+          height: 18px;
+          box-shadow: none;
+        }
+
+        .lead-phone-input .PhoneInputCountryIconImg {
+          display: block;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .lead-phone-input .PhoneInputInput {
+          width: 100%;
+          height: 100%;
+          border: none;
+          outline: none;
+          background: transparent;
+          color: #111;
+          font-size: 14px;
+        }
+
+        .lead-phone-input .PhoneInputInput::placeholder {
+          color: #999;
+        }
+      `}</style>
     </>
   );
 }
