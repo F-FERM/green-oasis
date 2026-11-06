@@ -121,7 +121,7 @@ export default function LeadModal() {
       }, 1500);
     } catch (err) {
       console.error("Lead submission error:", err);
-      toast.error("Failed to submit your details. Please try again.");
+      toast.error(err instanceof Error ? err.message : "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
