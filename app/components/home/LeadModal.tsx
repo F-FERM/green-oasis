@@ -19,7 +19,7 @@ export default function LeadModal() {
     setIsMounted(true);
   }, []);
 
-  // Auto 30-second timer trigger
+  // Auto 20-second timer trigger
   useEffect(() => {
     if (!isMounted) return;
 
@@ -31,7 +31,7 @@ export default function LeadModal() {
 
     const timer = setTimeout(() => {
       setIsOpen(true);
-    }, 30000); // 30 seconds
+    }, 20000); // 20 seconds
 
     return () => clearTimeout(timer);
   }, [isMounted]);
