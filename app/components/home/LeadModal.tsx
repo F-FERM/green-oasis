@@ -14,8 +14,9 @@ export default function LeadModal() {
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [city, setCity] = useState("");
-  const [state, setState] = useState("");
+  const [destination, setDestination] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -145,14 +146,26 @@ export default function LeadModal() {
       return;
     }
 
+    if (!email.trim()) {
+      toast.error("Please enter your email address");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.trim())) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
     try {
       setLoading(true);
 
       await api.post("/leads", {
         name: name.trim(),
         phone: phone, // International format, e.g. +919876543210
+        email: email.trim(),
         city: city.trim(),
-        state: state.trim(),
+        destination: destination.trim(),
       });
 
       toast.success("Thank you! Our team will contact you shortly.");
@@ -161,8 +174,9 @@ export default function LeadModal() {
 
       setName("");
       setPhone("");
+      setEmail("");
       setCity("");
-      setState("");
+      setDestination("");
 
       setTimeout(() => {
         setIsOpen(false);
@@ -263,7 +277,23 @@ export default function LeadModal() {
                   />
                 </div>
 
-                {/* City & State */}
+                {/* Email */}
+                <div>
+                  <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-[#333]">
+                    Email Address <span className="text-red-500">*</span>
+                  </label>
+
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email address"
+                    required
+                    className="h-12 w-full rounded-xl border border-[#E4E4E4] bg-[#FDFDFD] px-4 text-sm text-[#111] transition-all focus:border-[#004530] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#004530]/20"
+                  />
+                </div>
+
+                {/* City & Destination */}
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
                     <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-[#333]">
@@ -281,14 +311,14 @@ export default function LeadModal() {
 
                   <div>
                     <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-[#333]">
-                      State
+                      Destination
                     </label>
 
                     <input
                       type="text"
-                      value={state}
-                      onChange={(e) => setState(e.target.value)}
-                      placeholder="Your state"
+                      value={destination}
+                      onChange={(e) => setDestination(e.target.value)}
+                      placeholder="Preferred destination"
                       className="h-12 w-full rounded-xl border border-[#E4E4E4] bg-[#FDFDFD] px-4 text-sm text-[#111] transition-all focus:border-[#004530] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#004530]/20"
                     />
                   </div>
