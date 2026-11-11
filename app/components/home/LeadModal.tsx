@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { Loader2, Send, X } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
@@ -10,6 +11,7 @@ import "react-phone-number-input/style.css";
 import api from "@/lib/axios";
 
 export default function LeadModal() {
+  const pathname = usePathname();
   const [isMounted, setIsMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState("");
@@ -19,13 +21,15 @@ export default function LeadModal() {
   const [destination, setDestination] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const isAdminRoute = pathname?.startsWith("/admin");
+
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
   // Auto 20-second timer trigger
   useEffect(() => {
-    if (!isMounted) return;
+    if (!isMounted || isAdminRoute) return;
 
     // Check session storage flag
     const isDismissed = sessionStorage.getItem("lead_modal_dismissed");
@@ -38,11 +42,11 @@ export default function LeadModal() {
     }, 20000); // 20 seconds
 
     return () => clearTimeout(timer);
-  }, [isMounted]);
+  }, [isMounted, isAdminRoute]);
 
   // Event listener for opening modal on button clicks
   useEffect(() => {
-    if (!isMounted) return;
+    if (!isMounted || isAdminRoute) return;
 
     const handleOpenModal = () => {
       setIsOpen(true);
@@ -71,7 +75,8 @@ export default function LeadModal() {
         return;
       }
 
-      const text = clickable.textContent?.replace(/\s+/g, " ").trim().toLowerCase() ?? "";
+      const text =
+        clickable.textContent?.replace(/\s+/g, " ").trim().toLowerCase() ?? "";
       const href = clickable.getAttribute("href") ?? "";
 
       // Exclude specific navbar links, category tabs, and back-to-top button
@@ -119,9 +124,9 @@ export default function LeadModal() {
       window.removeEventListener("open-lead-modal", handleOpenModal);
       document.removeEventListener("click", handleGlobalClick, true);
     };
-  }, [isMounted]);
+  }, [isMounted, isAdminRoute]);
 
-  if (!isMounted) return null;
+  if (!isMounted || isAdminRoute) return null;
 
   const handleClose = () => {
     setIsOpen(false);
