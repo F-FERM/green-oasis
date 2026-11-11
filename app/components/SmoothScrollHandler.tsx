@@ -12,15 +12,23 @@ export default function SmoothScrollHandler() {
       if (!href || !href.startsWith("#") || href === "#") return;
 
       const targetId = href.slice(1);
-      // Support fallback if targetId is cta or plan
+      // Support fallback if targetId is cta, plan, or why
       const targetElement =
         document.getElementById(targetId) ||
         (targetId === "cta" ? document.getElementById("plan") : null) ||
-        (targetId === "plan" ? document.getElementById("cta") : null);
+        (targetId === "plan" ? document.getElementById("cta") : null) ||
+        (targetId === "why"
+          ? document.getElementById("discover") ||
+            document.getElementById("story")
+          : null);
 
       if (targetElement) {
         e.preventDefault();
         targetElement.scrollIntoView({ behavior: "smooth" });
+        window.history.pushState(null, "", `#${targetId}`);
+      } else if (targetId === "top" || targetId === "hero") {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: "smooth" });
         window.history.pushState(null, "", `#${targetId}`);
       }
     };
