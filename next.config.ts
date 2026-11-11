@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "green-oasis-api-production.up.railway.app",
+        hostname: "api.greenoasisholidays.com",
         pathname: "/api/images/**",
       },
       {
