@@ -59,11 +59,50 @@ export default function LeadModal() {
       );
       if (!clickable) return;
 
-      // Do not intercept clicks inside the Lead Modal itself or admin dashboard
+      // Do not intercept clicks inside the Lead Modal itself, admin dashboard, or role="tab" elements
       if (
         clickable.closest("[role='dialog']") ||
         clickable.closest("#lead-modal") ||
+        clickable.closest("[role='tab']") ||
+        clickable.closest("[role='tablist']") ||
         window.location.pathname.startsWith("/admin")
+      ) {
+        return;
+      }
+
+      const text = clickable.textContent?.replace(/\s+/g, " ").trim().toLowerCase() ?? "";
+      const href = clickable.getAttribute("href") ?? "";
+
+      // Exclude specific navbar links, category tabs, and back-to-top button
+      const EXCLUDED_LABELS = [
+        "our story",
+        "experiences",
+        "discover",
+        "why green oasis",
+        "nature & slow travel",
+        "culture & discovery",
+        "rest & togetherness",
+        "journeys of faith",
+        "back to top",
+      ];
+
+      const EXCLUDED_HREFS = [
+        "#story",
+        "#experiences",
+        "#discover",
+        "#why",
+        "#hero",
+        "#top",
+      ];
+
+      const isExcludedNav =
+        EXCLUDED_LABELS.some((label) => text.includes(label)) ||
+        (EXCLUDED_HREFS.includes(href) && !text.includes("plan"));
+
+      if (
+        isExcludedNav ||
+        href.startsWith("tel:") ||
+        href.startsWith("mailto:")
       ) {
         return;
       }
