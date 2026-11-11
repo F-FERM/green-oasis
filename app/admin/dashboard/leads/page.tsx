@@ -21,8 +21,9 @@ interface Lead {
   _id: string;
   name: string;
   phone: string;
+  email?: string;
   city?: string;
-  state?: string;
+  destination?: string;
   createdAt: string;
   updatedAt?: string;
 }
@@ -100,8 +101,9 @@ export default function AdminLeadsPage() {
     return (
       lead.name?.toLowerCase().includes(term) ||
       lead.phone?.toLowerCase().includes(term) ||
+      lead.email?.toLowerCase().includes(term) ||
       lead.city?.toLowerCase().includes(term) ||
-      lead.state?.toLowerCase().includes(term)
+      lead.destination?.toLowerCase().includes(term)
     );
   });
 
@@ -170,11 +172,11 @@ export default function AdminLeadsPage() {
       {/* SEARCH BAR & STATS */}
       <div className="mx-auto mt-[22px] max-w-[1600px] sm:mt-[28px] lg:mt-[32px]">
         <div className="flex flex-col gap-[12px] sm:flex-row sm:items-center sm:justify-between">
-          <div className="relative w-full sm:max-w-[360px]">
+          <div className="relative w-full sm:max-w-[380px]">
             <Search className="absolute left-[14px] top-1/2 h-[16px] w-[16px] -translate-y-1/2 text-[#888888]" />
             <Input
               type="text"
-              placeholder="Search by name, phone, city, or state..."
+              placeholder="Search by name, phone, email, city..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="h-[46px] rounded-[14px] border-[#E4E4E4] bg-white pl-[40px] text-[14px] focus-visible:ring-[#004530]/30"
@@ -205,7 +207,7 @@ export default function AdminLeadsPage() {
                 </p>
                 <p className="text-[13px] text-[#888888]">
                   {searchTerm
-                    ? "Try searching with a different name, phone number, city, or state."
+                    ? "Try searching with a different name, phone number, email, or city."
                     : "When users submit the modal on the website, lead records will appear here."}
                 </p>
               </CardContent>
@@ -219,8 +221,9 @@ export default function AdminLeadsPage() {
                       <th className="px-[20px] py-[14px]">#</th>
                       <th className="px-[20px] py-[14px]">Name</th>
                       <th className="px-[20px] py-[14px]">Phone Number</th>
+                      <th className="px-[20px] py-[14px]">Email</th>
                       <th className="px-[20px] py-[14px]">City</th>
-                      <th className="px-[20px] py-[14px]">State</th>
+                      <th className="px-[20px] py-[14px]">Destination</th>
                       <th className="px-[20px] py-[14px]">Submitted At</th>
                       <th className="px-[20px] py-[14px] text-right">
                         Actions
@@ -243,10 +246,13 @@ export default function AdminLeadsPage() {
                           {lead.phone}
                         </td>
                         <td className="px-[20px] py-[16px] text-[#444444]">
+                          {lead.email || "—"}
+                        </td>
+                        <td className="px-[20px] py-[16px] text-[#444444]">
                           {lead.city || "—"}
                         </td>
                         <td className="px-[20px] py-[16px] text-[#444444]">
-                          {lead.state || "—"}
+                          {lead.destination || "—"}
                         </td>
                         <td className="px-[20px] py-[16px] text-[13px] text-[#666666]">
                           {lead.createdAt
