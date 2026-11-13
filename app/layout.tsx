@@ -28,16 +28,29 @@ export default function RootLayout({
       className={cn("font-sans scroll-smooth", "font-sans", geist.variable)}
     >
       <head>
-        {/* Google Tag Manager */}
+        {/* Google Tag Manager - HEAD */}
         <Script
-          id="google-tag-manager"
-          strategy="afterInteractive"
-          src="https://www.googletagmanager.com/gtm.js?id=GTM-523JV35W"
+          id="gtm-head"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(w,d,s,l,i){
+                w[l]=w[l]||[];
+                w[l].push({'gtm.start': new Date().getTime(), event:'gtm.js'});
+                var f=d.getElementsByTagName(s)[0],
+                j=d.createElement(s),
+                dl=l!='dataLayer'?'&l='+l:'';
+                j.async=true;
+                j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+                f.parentNode.insertBefore(j,f);
+              })(window,document,'script','dataLayer','GTM-523JV35W');
+            `,
+          }}
         />
       </head>
 
       <body className="antialiased">
-        {/* Google Tag Manager (noscript) */}
+        {/* Google Tag Manager - BODY */}
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-523JV35W"
