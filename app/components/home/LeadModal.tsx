@@ -70,6 +70,7 @@ export default function LeadModal() {
         clickable.closest("#lead-modal") ||
         clickable.closest("[role='tab']") ||
         clickable.closest("[role='tablist']") ||
+        clickable.closest("[data-lead-form]") ||
         window.location.pathname.startsWith("/admin")
       ) {
         return;
