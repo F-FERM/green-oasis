@@ -27,7 +27,6 @@ const FALLBACK = {
     "Tell us where you’re dreaming of going, or simply how you want to feel. We’ll start with a conversation.",
   buttonText: "Start a conversation",
   buttonLink: "#contact",
-  note: "Demo enquiry link — replace with the official Green Oasis contact details before publishing.",
 };
 
 /* "Let’s go somewhere that means more."
@@ -75,7 +74,6 @@ export default function Cta() {
   const description = data?.finalCtaDescription || FALLBACK.description;
   const buttonText = data?.finalCtaButtonText || FALLBACK.buttonText;
   const buttonLink = data?.finalCtaButtonLink || FALLBACK.buttonLink;
-  const note = data ? data.finalCtaNote : FALLBACK.note;
 
   const { line1, line2, serif } = splitHeading(heading);
 
@@ -206,16 +204,6 @@ export default function Cta() {
                 "
               />
             </Link>
-
-            {/* Note from the API (hidden automatically if empty) */}
-            {note && (
-              <p
-                className="mt-5 max-w-[620px] text-[16px] leading-[1.6] text-[#3A3A3A] sm:text-[18px] sm:leading-[28px]"
-                style={{ fontWeight: 400 }}
-              >
-                {note}
-              </p>
-            )}
           </>
         )}
       </div>
