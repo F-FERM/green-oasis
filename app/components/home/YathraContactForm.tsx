@@ -41,7 +41,12 @@ export default function YathraContactForm() {
 
     setFormData((prev) => ({
       ...prev,
-      [name]: name === "peopleCount" ? (value === "" ? 0 : Math.max(0, parseInt(value, 10) || 0)) : value,
+      [name]:
+        name === "peopleCount"
+          ? value === ""
+            ? 0
+            : Math.max(0, parseInt(value, 10) || 0)
+          : value,
     }));
   };
 
@@ -89,7 +94,8 @@ export default function YathraContactForm() {
         leadType: "yathra",
       });
 
-      const successMsg = "Thank you! Your registration for Yathra Vismayam Travel Expo has been submitted successfully.";
+      const successMsg =
+        "Thank you! Your registration for Yathra Vismayam Travel Expo has been submitted successfully.";
 
       toast.success(successMsg);
       setAlertState({ type: "success", message: successMsg });
@@ -147,9 +153,7 @@ export default function YathraContactForm() {
             ) : (
               <AlertCircle className="h-5 w-5 shrink-0 text-[#991B1B] mt-0.5" />
             )}
-            <div className="flex-1">
-              {alertState.message}
-            </div>
+            <div className="flex-1">{alertState.message}</div>
           </div>
         )}
 
