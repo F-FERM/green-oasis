@@ -4,7 +4,7 @@ import Script from "next/script";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import SmoothScrollHandler from "./components/SmoothScrollHandler";
-import LeadModal from "./components/home/LeadModal";
+// import LeadModal from "./components/home/LeadModal";
 import { Geist } from "next/font/google";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
@@ -61,7 +61,7 @@ export default function RootLayout({
         </noscript>
 
         <SmoothScrollHandler />
-        <LeadModal />
+        {/* <LeadModal /> */}
         {children}
       </body>
     </html>
