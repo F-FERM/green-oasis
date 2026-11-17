@@ -22,14 +22,18 @@ export default function LeadModal() {
   const [loading, setLoading] = useState(false);
 
   const isAdminRoute = pathname?.startsWith("/admin");
+  const isRegistrationRoute =
+    pathname?.startsWith("/registration") ||
+    pathname?.startsWith("/yathra") ||
+    pathname?.includes("register");
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // Auto 20-second timer trigger
+  // Auto 20-second timer trigger (disabled on admin and registration routes)
   useEffect(() => {
-    if (!isMounted || isAdminRoute) return;
+    if (!isMounted || isAdminRoute || isRegistrationRoute) return;
 
     // Check session storage flag
     const isDismissed = sessionStorage.getItem("lead_modal_dismissed");
@@ -42,20 +46,30 @@ export default function LeadModal() {
     }, 20000); // 20 seconds
 
     return () => clearTimeout(timer);
-  }, [isMounted, isAdminRoute]);
+  }, [isMounted, isAdminRoute, isRegistrationRoute]);
 
   // Event listener for opening modal on button clicks
   useEffect(() => {
-    if (!isMounted || isAdminRoute) return;
+    if (!isMounted || isAdminRoute || isRegistrationRoute) return;
 
     const handleOpenModal = () => {
-      setIsOpen(true);
+      if (!isRegistrationRoute) {
+        setIsOpen(true);
+      }
     };
 
     window.addEventListener("open-lead-modal", handleOpenModal);
 
     // Global click handler to open lead modal on ANY button or link on the website
     const handleGlobalClick = (e: MouseEvent) => {
+      if (
+        window.location.pathname.startsWith("/registration") ||
+        window.location.pathname.startsWith("/admin") ||
+        window.location.pathname.includes("register")
+      ) {
+        return;
+      }
+
       const el = e.target as HTMLElement;
       if (!el) return;
 
@@ -64,14 +78,17 @@ export default function LeadModal() {
       );
       if (!clickable) return;
 
-      // Do not intercept clicks inside the Lead Modal itself, admin dashboard, or role="tab" elements
+      // Do not intercept clicks inside the Lead Modal itself, admin dashboard, registration forms/sections, or role="tab" elements
       if (
         clickable.closest("[role='dialog']") ||
         clickable.closest("#lead-modal") ||
         clickable.closest("[role='tab']") ||
         clickable.closest("[role='tablist']") ||
         clickable.closest("[data-lead-form]") ||
-        window.location.pathname.startsWith("/admin")
+        clickable.closest("#register") ||
+        clickable.closest("#yathra-register") ||
+        window.location.pathname.startsWith("/admin") ||
+        window.location.pathname.startsWith("/registration")
       ) {
         return;
       }
@@ -125,9 +142,9 @@ export default function LeadModal() {
       window.removeEventListener("open-lead-modal", handleOpenModal);
       document.removeEventListener("click", handleGlobalClick, true);
     };
-  }, [isMounted, isAdminRoute]);
+  }, [isMounted, isAdminRoute, isRegistrationRoute]);
 
-  if (!isMounted || isAdminRoute) return null;
+  if (!isMounted || isAdminRoute || isRegistrationRoute) return null;
 
   const handleClose = () => {
     setIsOpen(false);
