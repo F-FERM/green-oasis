@@ -73,7 +73,7 @@ export default function Footer() {
         <div className="border-t border-[#A4EA6D]/30 pt-3">
           <div className="flex flex-col gap-2 text-[11px] text-white/60 sm:flex-row sm:items-center sm:justify-between sm:text-[12px]">
             <p>
-              © {new Date().getFullYear()} Green Oasis. All rights reserved.
+              © 2026 Green Oasis. All rights reserved.
             </p>
 
             <p className="sm:text-right">

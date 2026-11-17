@@ -13,7 +13,7 @@ export const syne = Syne({
 export const dmSerif = DM_Serif_Display({
   subsets: ["latin"],
   weight: "400",
-  style: ["normal", "italic"],
+  style: "normal",
 });
 
 export const poppins = Poppins({
