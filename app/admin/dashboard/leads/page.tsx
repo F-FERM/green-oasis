@@ -6,11 +6,13 @@ import toast, { Toaster } from "react-hot-toast";
 import {
   Download,
   FileSpreadsheet,
+  Filter,
   Loader2,
   RefreshCw,
   Search,
   Trash2,
   UserCheck,
+  Users,
 } from "lucide-react";
 import api from "@/lib/axios";
 import { Button } from "@/components/ui/button";
@@ -24,6 +26,9 @@ interface Lead {
   email?: string;
   city?: string;
   destination?: string;
+  peopleCount?: number;
+  invitedBy?: string;
+  leadType?: string;
   createdAt: string;
   updatedAt?: string;
 }
@@ -33,6 +38,7 @@ export default function AdminLeadsPage() {
   const [loading, setLoading] = useState(true);
   const [exporting, setExporting] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedType, setSelectedType] = useState<"all" | "yathra" | "general">("all");
 
   const [deleteTarget, setDeleteTarget] = useState<Lead | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -54,17 +60,23 @@ export default function AdminLeadsPage() {
     fetchLeads();
   }, []);
 
-  const handleExportExcel = async () => {
+  const handleExportExcel = async (typeFilter?: string) => {
     try {
       setExporting(true);
-      const res = await api.get("/leads/export-excel", {
+      const endpoint = typeFilter && typeFilter !== "all"
+        ? `/leads/export-excel?type=${typeFilter}`
+        : "/leads/export-excel";
+
+      const fileName = typeFilter === "yathra" ? "yathra_leads.xls" : "leads.xls";
+
+      const res = await api.get(endpoint, {
         responseType: "blob",
       });
 
       const url = window.URL.createObjectURL(new Blob([res.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", "leads.xls");
+      link.setAttribute("download", fileName);
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -96,6 +108,15 @@ export default function AdminLeadsPage() {
   };
 
   const filteredLeads = leads.filter((lead) => {
+    // Type tab filter
+    if (selectedType === "yathra" && lead.leadType !== "yathra") {
+      return false;
+    }
+    if (selectedType === "general" && lead.leadType === "yathra") {
+      return false;
+    }
+
+    // Search term filter
     const term = searchTerm.toLowerCase().trim();
     if (!term) return true;
     return (
@@ -103,9 +124,14 @@ export default function AdminLeadsPage() {
       lead.phone?.toLowerCase().includes(term) ||
       lead.email?.toLowerCase().includes(term) ||
       lead.city?.toLowerCase().includes(term) ||
-      lead.destination?.toLowerCase().includes(term)
+      lead.invitedBy?.toLowerCase().includes(term) ||
+      lead.destination?.toLowerCase().includes(term) ||
+      lead.leadType?.toLowerCase().includes(term)
     );
   });
+
+  const yathraCount = leads.filter((l) => l.leadType === "yathra").length;
+  const generalCount = leads.length - yathraCount;
 
   return (
     <section className="min-h-screen bg-[#F8F0F5] px-[16px] py-[24px] xs:px-[20px] sm:px-[28px] sm:py-[36px] md:px-[36px] lg:px-[48px] lg:py-[48px] 2xl:px-[64px]">
@@ -131,8 +157,7 @@ export default function AdminLeadsPage() {
             Collected Leads
           </h1>
           <p className="mt-[6px] text-[13px] leading-[1.6] text-[#666666] sm:text-[14px] lg:text-[15px]">
-            View and export customer leads submitted from the website popup
-            modal.
+            View and export customer leads submitted from the website and Yathra Vismayam Travel Expo.
           </p>
         </div>
 
@@ -150,8 +175,8 @@ export default function AdminLeadsPage() {
           </Button>
 
           <Button
-            onClick={handleExportExcel}
-            disabled={exporting || leads.length === 0}
+            onClick={() => handleExportExcel(selectedType)}
+            disabled={exporting || filteredLeads.length === 0}
             className="flex h-[46px] items-center justify-center gap-[8px] rounded-[14px] bg-[#004530] text-[14px] font-medium text-white hover:bg-[#003323] hover:shadow-[0_14px_30px_rgba(0,69,48,0.3)] disabled:opacity-50 sm:h-[48px] sm:px-[22px] sm:text-[15px]"
           >
             {exporting ? (
@@ -162,32 +187,69 @@ export default function AdminLeadsPage() {
             ) : (
               <>
                 <FileSpreadsheet className="h-[18px] w-[18px]" />
-                Export to Excel
+                Export {selectedType === "yathra" ? "Yathra " : selectedType === "general" ? "General " : ""}Excel
               </>
             )}
           </Button>
         </div>
       </div>
 
-      {/* SEARCH BAR & STATS */}
+      {/* TABS & FILTERS */}
       <div className="mx-auto mt-[22px] max-w-[1600px] sm:mt-[28px] lg:mt-[32px]">
-        <div className="flex flex-col gap-[12px] sm:flex-row sm:items-center sm:justify-between">
-          <div className="relative w-full sm:max-w-[380px]">
-            <Search className="absolute left-[14px] top-1/2 h-[16px] w-[16px] -translate-y-1/2 text-[#888888]" />
-            <Input
-              type="text"
-              placeholder="Search by name, phone, email, city..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="h-[46px] rounded-[14px] border-[#E4E4E4] bg-white pl-[40px] text-[14px] focus-visible:ring-[#004530]/30"
-            />
+        <div className="flex flex-col gap-[16px] md:flex-row md:items-center md:justify-between">
+          {/* TAB BUTTONS */}
+          <div className="flex flex-wrap items-center gap-[8px] rounded-[16px] bg-white/80 p-[6px] shadow-sm border border-[#ECECEC]">
+            <button
+              type="button"
+              onClick={() => setSelectedType("all")}
+              className={`h-[38px] rounded-[12px] px-[18px] text-[13px] font-semibold transition-all ${
+                selectedType === "all"
+                  ? "bg-[#004530] text-white shadow-sm"
+                  : "text-[#555555] hover:bg-[#F4F1EA] hover:text-[#111111]"
+              }`}
+            >
+              All Leads ({leads.length})
+            </button>
+            <button
+              type="button"
+              onClick={() => setSelectedType("yathra")}
+              className={`h-[38px] rounded-[12px] px-[18px] text-[13px] font-semibold transition-all ${
+                selectedType === "yathra"
+                  ? "bg-[#004530] text-white shadow-sm"
+                  : "text-[#555555] hover:bg-[#F4F1EA] hover:text-[#111111]"
+              }`}
+            >
+              Yathra Expo Leads ({yathraCount})
+            </button>
+            <button
+              type="button"
+              onClick={() => setSelectedType("general")}
+              className={`h-[38px] rounded-[12px] px-[18px] text-[13px] font-semibold transition-all ${
+                selectedType === "general"
+                  ? "bg-[#004530] text-white shadow-sm"
+                  : "text-[#555555] hover:bg-[#F4F1EA] hover:text-[#111111]"
+              }`}
+            >
+              Website Leads ({generalCount})
+            </button>
           </div>
 
           <div className="flex items-center gap-[8px] text-[13px] font-medium text-[#555555]">
             <UserCheck className="h-[16px] w-[16px] text-[#004530]" />
-            <span>Total Leads: {leads.length}</span>
-            {searchTerm && <span>({filteredLeads.length} matching)</span>}
+            <span>Showing: {filteredLeads.length} leads</span>
           </div>
+        </div>
+
+        {/* SEARCH BAR */}
+        <div className="mt-[16px] relative w-full sm:max-w-[420px]">
+          <Search className="absolute left-[14px] top-1/2 h-[16px] w-[16px] -translate-y-1/2 text-[#888888]" />
+          <Input
+            type="text"
+            placeholder="Search by name, phone, city..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="h-[46px] rounded-[14px] border-[#E4E4E4] bg-white pl-[40px] text-[14px] focus-visible:ring-[#004530]/30"
+          />
         </div>
 
         {/* LIST / TABLE */}
@@ -203,12 +265,12 @@ export default function AdminLeadsPage() {
                 <p className="text-[15px] font-medium text-[#333333]">
                   {searchTerm
                     ? "No leads matching your search"
-                    : "No leads collected yet"}
+                    : "No leads collected for this view yet"}
                 </p>
                 <p className="text-[13px] text-[#888888]">
                   {searchTerm
-                    ? "Try searching with a different name, phone number, email, or city."
-                    : "When users submit the modal on the website, lead records will appear here."}
+                    ? "Try searching with a different keyword."
+                    : "When users submit enquiry forms on the website or Yathra Vismayam Expo form, leads will appear here."}
                 </p>
               </CardContent>
             </Card>
@@ -221,9 +283,29 @@ export default function AdminLeadsPage() {
                       <th className="px-[20px] py-[14px]">#</th>
                       <th className="px-[20px] py-[14px]">Name</th>
                       <th className="px-[20px] py-[14px]">Phone Number</th>
-                      <th className="px-[20px] py-[14px]">Email</th>
-                      <th className="px-[20px] py-[14px]">City</th>
-                      <th className="px-[20px] py-[14px]">Destination</th>
+
+                      {selectedType === "general" ? (
+                        <>
+                          <th className="px-[20px] py-[14px]">Email</th>
+                          <th className="px-[20px] py-[14px]">City</th>
+                          <th className="px-[20px] py-[14px]">Destination</th>
+                        </>
+                      ) : selectedType === "yathra" ? (
+                        <>
+                          <th className="px-[20px] py-[14px]">Place</th>
+                          <th className="px-[20px] py-[14px]">People Count</th>
+                          <th className="px-[20px] py-[14px]">Invited By</th>
+                        </>
+                      ) : (
+                        <>
+                          <th className="px-[20px] py-[14px]">City / Place</th>
+                          <th className="px-[20px] py-[14px]">People Count</th>
+                          <th className="px-[20px] py-[14px]">Invited By</th>
+                          <th className="px-[20px] py-[14px]">Email</th>
+                          <th className="px-[20px] py-[14px]">Type</th>
+                        </>
+                      )}
+
                       <th className="px-[20px] py-[14px]">Submitted At</th>
                       <th className="px-[20px] py-[14px] text-right">
                         Actions
@@ -245,15 +327,64 @@ export default function AdminLeadsPage() {
                         <td className="px-[20px] py-[16px] font-medium text-[#004530]">
                           {lead.phone}
                         </td>
-                        <td className="px-[20px] py-[16px] text-[#444444]">
-                          {lead.email || "—"}
-                        </td>
-                        <td className="px-[20px] py-[16px] text-[#444444]">
-                          {lead.city || "—"}
-                        </td>
-                        <td className="px-[20px] py-[16px] text-[#444444]">
-                          {lead.destination || "—"}
-                        </td>
+
+                        {selectedType === "general" ? (
+                          <>
+                            <td className="px-[20px] py-[16px] text-[#444444]">
+                              {lead.email || "—"}
+                            </td>
+                            <td className="px-[20px] py-[16px] text-[#444444]">
+                              {lead.city || "—"}
+                            </td>
+                            <td className="px-[20px] py-[16px] text-[#444444]">
+                              {lead.destination || "—"}
+                            </td>
+                          </>
+                        ) : selectedType === "yathra" ? (
+                          <>
+                            <td className="px-[20px] py-[16px] text-[#444444]">
+                              {lead.city || "—"}
+                            </td>
+                            <td className="px-[20px] py-[16px] font-semibold text-[#111111]">
+                              <span className="inline-flex items-center gap-1.5 rounded-full bg-[#E5F7CB] px-3 py-1 text-xs font-bold text-[#004530]">
+                                <Users className="h-3.5 w-3.5" />
+                                {lead.peopleCount || 1} {(lead.peopleCount || 1) === 1 ? "person" : "people"}
+                              </span>
+                            </td>
+                            <td className="px-[20px] py-[16px] text-[#444444] font-medium">
+                              {lead.invitedBy || "—"}
+                            </td>
+                          </>
+                        ) : (
+                          <>
+                            <td className="px-[20px] py-[16px] text-[#444444]">
+                              {lead.city || "—"}
+                            </td>
+                            <td className="px-[20px] py-[16px] text-[#444444]">
+                              {lead.leadType === "yathra"
+                                ? `${lead.peopleCount || 1} people`
+                                : "—"}
+                            </td>
+                            <td className="px-[20px] py-[16px] text-[#444444]">
+                              {lead.invitedBy || "—"}
+                            </td>
+                            <td className="px-[20px] py-[16px] text-[#444444]">
+                              {lead.email || "—"}
+                            </td>
+                            <td className="px-[20px] py-[16px]">
+                              {lead.leadType === "yathra" ? (
+                                <span className="inline-flex items-center rounded-full bg-[#D7F3AD] px-3 py-1 text-xs font-bold text-[#0C3B24]">
+                                  Yathra Expo
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center rounded-full bg-[#F0F0F0] px-3 py-1 text-xs font-medium text-[#555555]">
+                                  Website Lead
+                                </span>
+                              )}
+                            </td>
+                          </>
+                        )}
+
                         <td className="px-[20px] py-[16px] text-[13px] text-[#666666]">
                           {lead.createdAt
                             ? new Date(lead.createdAt).toLocaleString("en-IN", {

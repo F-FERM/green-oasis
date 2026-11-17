@@ -9,12 +9,15 @@ import Founder from "../components/home/Journey";
 import Marquee from "../components/home/Marquee";
 import ServicesSection from "../components/home/ServicesSection";
 import StatsStrip from "../components/home/StatsStrip";
+import YathraContactForm from "../components/home/YathraContactForm";
+import YathraHero from "../components/home/YathraHero";
 import YouTubeShorts from "../components/home/YouTubeShorts";
 
 export default function HomePage() {
   return (
     <main className="min-h-screen">
-      <Hero />
+      <YathraHero/>
+      {/* <Hero />
       <Marquee />
       <About />
       <StatsStrip />
@@ -23,11 +26,12 @@ export default function HomePage() {
       <Founder />
       <ServicesSection />
       <YouTubeShorts />
-      <CertificationsSection />
+      <CertificationsSection /> */}
       {/* <Difference />
       <Personas />
       <HowItWorks /> */}
-      <Cta />
+      {/* <Cta /> */}
+       <YathraContactForm />
       <Footer />
     </main>
   );
