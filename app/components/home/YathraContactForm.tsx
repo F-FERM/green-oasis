@@ -218,7 +218,7 @@ export default function YathraContactForm() {
           {/* People's Count */}
           <div>
             <label htmlFor="yathra-count" className={labelClass}>
-              PEOPLE'S COUNT
+              NUMBER OF PEOPLE
             </label>
 
             <input
@@ -265,7 +265,7 @@ export default function YathraContactForm() {
                 </>
               ) : (
                 <>
-                  SUBMIT ENQUIRY
+                  CONFIRM MY REGISTRATION
                   <ArrowUpRight size={16} className="stroke-[2.5]" />
                 </>
               )}
