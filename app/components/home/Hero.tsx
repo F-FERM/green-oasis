@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import heroDesktop from "../../../public/banner/green-oasis-hero-desktop.png";
-import logoImg from "../../../public/images/logo.png";
+import logoImg from "../../../public/banner-logo.png";
 
 const API_BASE = process.env.NEXT_PUBLIC_BASE_URL ?? "";
 
@@ -118,7 +118,7 @@ export default function Hero() {
 
       {/* Header */}
       <div className="absolute inset-x-0 top-0 z-20 px-5 sm:px-8 lg:px-12 xl:px-[4.3%]">
-        <header className="relative flex min-h-[64px] items-center justify-between gap-5 border-b border-white/30 py-3 sm:min-h-[72px]">
+        <header className="relative flex min-h-[64px] items-center justify-between gap-5 border-b border-[#84848455] py-3 sm:min-h-[72px]">
           <Link
             href="/"
             aria-label="Green Oasis home"
@@ -140,7 +140,7 @@ export default function Hero() {
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    className="whitespace-nowrap text-[12px] font-semibold text-white transition-colors hover:text-[#b9f27d] xl:text-[13px]"
+                    className="whitespace-nowrap text-[12px] font-semibold text-black transition-colors hover:text-[#004530] xl:text-[13px]"
                   >
                     {link.label}
                   </Link>
@@ -169,7 +169,7 @@ export default function Hero() {
               aria-expanded={open}
               aria-controls="mobile-menu"
               onClick={() => setOpen((value) => !value)}
-              className="rounded-full p-2 text-white lg:hidden"
+              className="rounded-full p-2 text-black lg:hidden"
             >
               {open ? <X size={25} /> : <Menu size={25} />}
             </button>
